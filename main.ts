@@ -1,4 +1,4 @@
-import{mkdirSync,readdirSync,readFileSync,writeFileSync}from'node:fs';
+import{existsSync,mkdirSync,readdirSync,readFileSync,statSync,writeFileSync}from'node:fs';
 import{join}from'node:path';
 function run(p,q){
  const D=new Int32Array(256),C=new Int32Array(64),M=new Int32Array(256),o=[];
@@ -77,6 +77,7 @@ function run(p,q){
 }
 const I=process.env.MAKEFUN_INPUT_DIR??'/input',O=process.env.MAKEFUN_OUTPUT_DIR??'/output';
 for(const id of readdirSync(I).sort()){
+ if(!statSync(join(I,id)).isDirectory()||!existsSync(join(I,id,'program.bin')))continue;
  const r=run(readFileSync(join(I,id,'program.bin')),readFileSync(join(I,id,'input.bin')));
  mkdirSync(join(O,id),{recursive:true});
  writeFileSync(join(O,id,'stdout.bin'),Uint8Array.from(r.o));
